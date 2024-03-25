@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useEffect } from "react";
+import Modal from "./components/modal";
 import "./index.css";
 
 const BalanceContainer = ({
@@ -20,7 +22,7 @@ const Header = () => {
   return (
     <div className="header">
       <img className="logo" src="/cuentasclaras-logo.svg" alt="" />
-      <button className="btn-faq">¿Qué es?</button>
+      <Modal />
     </div>
   );
 };
@@ -47,14 +49,14 @@ const Transaction = ({ initial, description, date, tag, money }) => {
         >
           <p>{tag}</p>
         </div>
-        <p className="transaction-money">{money}</p>
+        <p className="transaction-money">${parseInt(money).toLocaleString('es-CO')}</p>
       </div>
       <div className="line"></div>
     </div>
   );
 };
 
-const Form = () => {
+const Form = ({ addTransaction }) => {
   const [formData, setFormData] = useState({
     type: "",
     description: "",
@@ -70,11 +72,19 @@ const Form = () => {
     });
   };
 
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
+
+    if (formData.type === "" || formData.description === "" || formData.money === 0 || formData.date === "") {
+      alert("Por favor, llena todos los campos");
+      return;
+    }else{
+      addTransaction(formData);
+
+      // setFormData({type: "", description: "", money: "", date: ""});
+    }
   };
+
 
   return (
     <form className="expenses-form" onSubmit={handleSubmit}>
@@ -83,7 +93,11 @@ const Form = () => {
           <input
             type="radio"
             name="type"
-            id="income" />
+            id="income"
+            value="Ingreso"
+            checked={formData.type === "Ingreso"}
+            onChange={handleChange}
+            />
           Ingreso
         </label>
         <label htmlFor="expense">
@@ -98,7 +112,10 @@ const Form = () => {
           Egreso
         </label>
       </div>
-      <input className="form-submit" type="submit" value="Añadir" />
+      <button className="form-submit" type="submit">
+        <span className="material-symbols-outlined">add</span>
+        <p className="submit-text">Añadir</p>
+      </button>
       <input
         className="form-description"
         type="text"
@@ -106,10 +123,11 @@ const Form = () => {
         name="description"
         value={formData.description}
         onChange={handleChange}
+        maxLength="30"
       />
       <input
         className="form-money"
-        type="text"
+        type="number"
         placeholder="Monto"
         name="money"
         value={formData.money}
@@ -128,26 +146,64 @@ const Form = () => {
 };
 
 function App() {
+
+  const [transactions, setTransactions] = useState([]);
+  const [balance, setBalance] = useState(0);
+  const [income, setIncome] = useState(0);
+  const [expense, setExpense] = useState(0);
+
+  const currencyFormat =  {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 0,
+    currencyDisplay: "symbol"
+  }
+
+  const addTransaction = (transaction) => {
+    setTransactions([...transactions, transaction]);
+  }
+
+  const renderTransactions = () => {
+      if (transactions.length === 0) {
+        return <p className="no-transactions">No hay transacciones <br /> <b>¡Añade una! </b></p>
+      } else {
+        return transactions.map((transaction, index) => {
+          return (
+            <Transaction
+              key={index}
+              initial={transaction.description[0].toLowerCase()}
+              description={transaction.description}
+              date={transaction.date}
+              tag={transaction.type}
+              money={transaction.money}
+            />
+          );
+        });
+      }
+  };
+
+  useEffect(() => {
+    let totalIncome = 0;
+    let totalExpense = 0;
+    transactions.forEach((transaction) => {
+      if (transaction.type === "Ingreso") {
+        totalIncome += parseInt(transaction.money);
+      } else {
+        totalExpense += parseInt(transaction.money);
+      }
+    });
+    setIncome(totalIncome);
+    setExpense(totalExpense);
+    setBalance(totalIncome - totalExpense);
+  }, [transactions]);
+
   return (
     <>
       <div className="container-web">
         <Header />
         <div className="content">
           <div className="expenses-feed">
-            <Transaction
-              initial="S"
-              description="Salario mes de junio"
-              date="Enero, 19. 2024"
-              tag="Ingreso"
-              money="$2.190.219"
-            />
-            <Transaction
-              initial="S"
-              description="Compra de cosas otakus"
-              date="Enero, 20. 2024"
-              tag="Egreso"
-              money="-$2.190.219"
-            />
+            {renderTransactions()}
           </div>
           <div className="expenses-resume">
             <BalanceContainer
@@ -161,21 +217,21 @@ function App() {
                   del mes
                 </>
               }
-              money={"$1.900.000.000"}
+              money={balance.toLocaleString('es-CO', currencyFormat).replace(/\s/g, '')}
             />
             <div className="resume-detail">
               <BalanceContainer
                 boxStyle={"income"}
                 title={"Ingresos"}
-                money={"$1.900.000.000"}
+                money={income.toLocaleString('es-CO', currencyFormat).replace(/\s/g, '')}
               />
               <BalanceContainer
                 boxStyle={"expense"}
                 title={"Egresos"}
-                money={"-$1.900.000.000"}
+                money={"-" + expense.toLocaleString('es-CO', currencyFormat).replace(/\s/g, '')}
               />
             </div>
-            <Form />
+            <Form addTransaction={addTransaction}/>
           </div>
         </div>
       </div>

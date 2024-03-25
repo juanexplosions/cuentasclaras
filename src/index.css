@@ -5,6 +5,14 @@
   margin: 0px;
 }
 
+::-webkit-scrollbar{
+  width: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #001a41;
+}
+
 body {
   overflow: hidden;
   background-color: #f9f9ff;
@@ -26,23 +34,7 @@ body {
 .logo {
   justify-self: start;
   height: 55px;
-  margin-left: 20px;
-}
-
-.btn-faq {
-  justify-self: end;
-  width: 120px;
-  height: 40px;
-  margin-right: 20px;
-  font-weight: 700;
-  font-size: 15px;
-  color: #445e91;
-  background-color: #ffffff;
-  border: 1px solid;
-  border-radius: 34px;
-  border-color: #74777f;
-  cursor: pointer;
-  box-shadow: 0px 4px 12px rgba(0, 26, 65, 0.15);
+  margin-left: 10px;
 }
 
 .content {
@@ -53,14 +45,20 @@ body {
 
 .expenses-feed {
   display: grid;
-  margin-top: 20px;
-  margin-left: 20px;
-  margin-right: 8px;
+  margin-left: 10px;
   grid-template-rows: repeat(auto-fill, minmax(80px, 1fr));
+  overflow-y: scroll;
 }
+
 .transaction-container {
   display: grid;
   grid-template-rows: 1fr 1fr;
+  height: 82px;
+}
+
+.no-transactions {
+  margin-top: 15px;
+  text-align: center;
 }
 
 .transaction {
@@ -68,6 +66,8 @@ body {
   grid-template-columns: 55px 2fr 1fr;
   grid-template-rows: 1fr 1fr;
   align-items: center;
+  margin-right: 10px;
+  margin-top: 10px;
 }
 
 .line {
@@ -190,42 +190,6 @@ body {
   grid-template-columns: 1fr 1fr;
 }
 
-.income-title {
-  font-size: 20px;
-  font-weight: 200;
-  margin-right: 20px;
-  margin-bottom: 5px;
-  align-self: end;
-}
-
-.income-money {
-  font-size: 26px;
-  font-weight: 700;
-  margin-right: 20px;
-}
-
-.resume-expense {
-  display: grid;
-  background-color: #adc6ff;
-  justify-content: end;
-  text-align: right;
-  color: #2b4678;
-}
-
-.expense-title {
-  font-size: 20px;
-  font-weight: 200;
-  margin-right: 20px;
-  margin-bottom: 5px;
-  align-self: end;
-}
-
-.expense-money {
-  font-size: 26px;
-  font-weight: 700;
-  margin-right: 20px;
-}
-
 .expenses-form {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -269,11 +233,25 @@ input[type="radio"]:checked::after {
   transform: translate(-50%, -50%);
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 input[type="text"]::placeholder {
   color: rgba(0, 26, 65, 0.4);
 }
 
-input[type="date"] {
+input[type="number"]::placeholder {
+  color: rgba(0, 26, 65, 0.4);
+}
+
+input[type="date"]::before{
   color: rgba(0, 26, 65, 0.4);
 }
 
@@ -302,6 +280,23 @@ input:focus {
   font-weight: 700;
   font-size: 15px;
   cursor: pointer;
+  display: grid;
+  grid-template-columns: 0.45fr 1fr;
+}
+
+.material-symbols-outlined {
+  font-size: 15px;
+  justify-self: end;
+  align-self: center;
+}
+
+.submit-text{
+  justify-self: start;
+  align-self: center;
+}
+
+.form-submit:focus {
+  background-color: #445e91;
 }
 
 .form-description {
