@@ -28,6 +28,15 @@ const Header = () => {
 };
 
 const Transaction = ({ initial, description, date, tag, money }) => {
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString("es-CO", options);
+  };
+
   return (
     <div className="transaction-container">
       <div className="transaction">
@@ -37,10 +46,10 @@ const Transaction = ({ initial, description, date, tag, money }) => {
           ${tag === "Ingreso" ? "initial-income" : "initial-expense"}
         `}
         >
-          <p className>{initial}</p>
+          <p>{initial}</p>
         </div>
         <p className="transaction-description">{description}</p>
-        <p className="transaction-date">{date}</p>
+        <p className="transaction-date">{formatDate(date)}</p>{" "}
         <div
           className={`
           transaction-tag
@@ -49,7 +58,10 @@ const Transaction = ({ initial, description, date, tag, money }) => {
         >
           <p>{tag}</p>
         </div>
-        <p className="transaction-money">${parseInt(money).toLocaleString('es-CO')}</p>
+        <p className="transaction-money">
+          {tag === "Egreso" ? "-" : ""}$
+          {parseInt(money).toLocaleString("es-CO")}
+        </p>
       </div>
       <div className="line"></div>
     </div>
@@ -75,21 +87,25 @@ const Form = ({ addTransaction }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (formData.type === "" || formData.description === "" || formData.money === 0 || formData.date === "") {
+    if (
+      formData.type === "" ||
+      formData.description === "" ||
+      formData.money === 0 ||
+      formData.date === ""
+    ) {
       alert("Por favor, llena todos los campos");
       return;
-    }else{
+    } else {
       addTransaction(formData);
 
       // setFormData({type: "", description: "", money: "", date: ""});
     }
   };
 
-
   return (
     <form className="expenses-form" onSubmit={handleSubmit}>
       <div className="radio-btns">
-        <label className="income-text" htmlFor="income">
+        <label className="radio-text" htmlFor="income">
           <input
             type="radio"
             name="type"
@@ -97,10 +113,10 @@ const Form = ({ addTransaction }) => {
             value="Ingreso"
             checked={formData.type === "Ingreso"}
             onChange={handleChange}
-            />
+          />
           Ingreso
         </label>
-        <label htmlFor="expense">
+        <label className="radio-text" htmlFor="expense">
           <input
             type="radio"
             name="type"
@@ -123,7 +139,7 @@ const Form = ({ addTransaction }) => {
         name="description"
         value={formData.description}
         onChange={handleChange}
-        maxLength="30"
+        maxLength="25"
       />
       <input
         className="form-money"
@@ -146,40 +162,43 @@ const Form = ({ addTransaction }) => {
 };
 
 function App() {
-
   const [transactions, setTransactions] = useState([]);
   const [balance, setBalance] = useState(0);
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
 
-  const currencyFormat =  {
+  const currencyFormat = {
     style: "currency",
     currency: "COP",
     maximumFractionDigits: 0,
-    currencyDisplay: "symbol"
-  }
+    currencyDisplay: "symbol",
+  };
 
   const addTransaction = (transaction) => {
     setTransactions([...transactions, transaction]);
-  }
+  };
 
   const renderTransactions = () => {
-      if (transactions.length === 0) {
-        return <p className="no-transactions">No hay transacciones <br /> <b>¡Añade una! </b></p>
-      } else {
-        return transactions.map((transaction, index) => {
-          return (
-            <Transaction
-              key={index}
-              initial={transaction.description[0].toLowerCase()}
-              description={transaction.description}
-              date={transaction.date}
-              tag={transaction.type}
-              money={transaction.money}
-            />
-          );
-        });
-      }
+    if (transactions.length === 0) {
+      return (
+        <p className="no-transactions">
+          No hay transacciones <br /> <b>¡Añade una! </b>
+        </p>
+      );
+    } else {
+      return transactions.map((transaction, index) => {
+        return (
+          <Transaction
+            key={index}
+            initial={transaction.description[0].toLowerCase()}
+            description={transaction.description}
+            date={transaction.date}
+            tag={transaction.type}
+            money={transaction.money}
+          />
+        );
+      });
+    }
   };
 
   useEffect(() => {
@@ -202,9 +221,7 @@ function App() {
       <div className="container-web">
         <Header />
         <div className="content">
-          <div className="expenses-feed">
-            {renderTransactions()}
-          </div>
+          <div className="expenses-feed">{renderTransactions()}</div>
           <div className="expenses-resume">
             <BalanceContainer
               boxStyle={"balance"}
@@ -217,21 +234,30 @@ function App() {
                   del mes
                 </>
               }
-              money={balance.toLocaleString('es-CO', currencyFormat).replace(/\s/g, '')}
+              money={balance
+                .toLocaleString("es-CO", currencyFormat)
+                .replace(/\s/g, "")}
             />
             <div className="resume-detail">
               <BalanceContainer
                 boxStyle={"income"}
                 title={"Ingresos"}
-                money={income.toLocaleString('es-CO', currencyFormat).replace(/\s/g, '')}
+                money={income
+                  .toLocaleString("es-CO", currencyFormat)
+                  .replace(/\s/g, "")}
               />
               <BalanceContainer
                 boxStyle={"expense"}
                 title={"Egresos"}
-                money={"-" + expense.toLocaleString('es-CO', currencyFormat).replace(/\s/g, '')}
+                money={
+                  "-" +
+                  expense
+                    .toLocaleString("es-CO", currencyFormat)
+                    .replace(/\s/g, "")
+                }
               />
             </div>
-            <Form addTransaction={addTransaction}/>
+            <Form addTransaction={addTransaction} />
           </div>
         </div>
       </div>

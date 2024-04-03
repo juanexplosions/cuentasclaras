@@ -82,3 +82,18 @@
 .modal-content a{
     color: #445e91;
 }
+
+@media screen and (max-width: 1080px) {
+  .modal-content {
+    width: 90%;
+  }
+
+  .modal-content h2 {
+    font-size: 30px;
+  }
+
+  .modal-bttn {
+    font-size: 20px;
+  }
+
+}
