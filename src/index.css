@@ -35,34 +35,13 @@ body {
   grid-template-columns: 1fr 1fr;
 }
 
-input::-webkit-datetime-edit-day-field {
-  color: red;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  background: transparent;
-  bottom: 0;
-  color: transparent;
-  cursor: pointer;
-  height: auto;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: auto;
-}
-
-input[type="date"]{
-  position: relative§;
-}
-
 .expenses-feed {
   display: grid;
   margin-left: 10px;
   grid-template-rows: repeat(auto-fill, minmax(80px, 1fr));
-  overflow-y: scroll;
-  scrollbar-color: #001a41;
-  scrollbar-width: 3px;
+  overflow-y: auto;
+  scrollbar-color: #001a41 transparent;
+  scrollbar-width: thin;
 }
 
 .transaction-container {
