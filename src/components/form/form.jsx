@@ -30,7 +30,7 @@ export default function Form ({ addTransaction }) {
     } else {
       addTransaction(formData);
 
-      // setFormData({type: "", description: "", money: "", date: ""});
+     setFormData({type: "", description: "", money: "", date: ""});
     }
   };
 
