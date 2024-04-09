@@ -42,17 +42,20 @@ function App() {
   };
 
   const renderTransactions = () => {
-    if (transactions.length === 0) {
+
+    const sortedTransactions = transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    if (sortedTransactions.length === 0) {
       return (
         <p className="no-transactions">
           No hay transacciones <br /> <b>¡Añade una! </b>
         </p>
       );
     } else {
-      return transactions.map((transaction, index) => {
+      return sortedTransactions.map((transaction, index) => {
         return (
           <Transaction
-            key={index}
+            key={"transaction-" + index}
             initial={transaction.description[0].toLowerCase()}
             description={transaction.description}
             date={transaction.date}
@@ -73,8 +76,6 @@ function App() {
           <div className="expenses-resume">
             <BalanceContainer
               boxStyle={"balance"}
-              titleStyle={"balance-title"}
-              moneyStyle={"balance-money"}
               title={
                 <>
                   Tu balance

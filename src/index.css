@@ -39,7 +39,7 @@ body {
   display: grid;
   margin-left: 10px;
   grid-template-rows: repeat(auto-fill, minmax(80px, 1fr));
-  overflow-y: auto;
+  overflow-y: scroll;
   scrollbar-color: #001a41 transparent;
   scrollbar-width: thin;
 }
@@ -156,17 +156,11 @@ body {
   margin-right: 20px;
 }
 
-.balance-title {
-  font-size: 50px;
-}
-
-.balance-money {
-  font-size: 50px;
-}
-
 .balance {
   background-color: #001a41;
   color: #d8e2ff;
+  font-size: 50px;
+  font-size: 50px;
 }
 
 .income {
@@ -327,6 +321,29 @@ input:focus {
 }
 
 @media only screen and (max-width: 1080px) {
+  .container-web {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+  }
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .expenses-feed {
+    overflow-y: auto;
+    height: calc(100vh - 75px);
+  }
+
+  .expenses-resume {
+    position: sticky;
+    top: 75px;
+    z-index: 100;
+  }
+
   .content {
     grid-template-columns: none;
     grid-template-rows: 1fr 1fr;
@@ -351,18 +368,12 @@ input:focus {
     height: 38px;
   }
 
-  .money-box {
-    font-size: 14px;
-  }
-
+  .money-box,
   .title-box {
     font-size: 14px;
   }
 
-  .balance-title {
-    font-size: 18px;
-  }
-
+  .balance-title,
   .balance-money {
     font-size: 18px;
   }
@@ -404,32 +415,20 @@ input:focus {
   }
 
   .transaction-description {
-    color: #001a41;
     font-size: 14px;
     margin-left: 8px;
   }
 
   .transaction-date {
-    color: #a1abc4;
-    text-align: right;
     font-size: 10px;
   }
 
   .transaction-money {
-    text-align: right;
-    color: #001a41;
     font-size: 14px;
   }
 
   .transaction-tag {
-    display: grid;
-    margin-left: 10px;
-    height: 18px;
     font-size: 8px;
-    align-self: center;
-    border-radius: 20px;
-    align-items: center;
-    justify-items: center;
     width: 50px;
   }
 }

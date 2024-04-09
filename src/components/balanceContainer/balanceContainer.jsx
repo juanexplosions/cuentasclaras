@@ -7,8 +7,8 @@ export default function BalanceContainer({
 }) {
   return (
     <div className={`box ${boxStyle}`}>
-      <p className={`title-box ${titleStyle}`}>{title}</p>
-      <p className={`money-box ${moneyStyle}`}>{money}</p>
+      <p className={`title-box ${boxStyle}`}>{title}</p>
+      <p className={`money-box ${boxStyle}`}>{money}</p>
     </div>
   );
 }
